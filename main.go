@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os/exec"
 	"strconv"
@@ -46,5 +47,8 @@ func main() {
 	http.HandleFunc("/signal/reload", reloadHandlerFactory(reload))
 	http.HandleFunc("/signal/stop", reloadHandlerFactory(stop))
 	http.HandleFunc("/signal/start", reloadHandlerFactory(start))
+
+	log.Printf("Listening on port %d\n", args.Port)
+
 	http.ListenAndServe(":"+strconv.Itoa(int(args.Port)), nil)
 }

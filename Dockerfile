@@ -1,18 +1,13 @@
 ARG GO_VERSION=1.22.5
-FROM golang:${GO_VERSION}-alpine AS base
+FROM golang:${GO_VERSION}-alpine AS build
 
-RUN --mount=type=cache,target=/go/pkg/mod/ \
-  --mount=type=bind,source=go.sum,target=go.sum \
-  --mount=type=bind,source=go.mod,target=go.mod \
-  go mod download -x
+COPY go.mod go.sum ./
+RUN go mod download -x
 
-FROM base AS build
-RUN --mount=type=cache,target=/go/pkg/mod/ \
-  --mount=type=bind,target=. \
-  go build -o /nginx-remote-signal
+COPY main.go .
+RUN go build -o /nginx-remote-signal
 
 FROM nginx:alpine AS nginx
+COPY /nrs-docker-entrypoint.sh /docker-entrypoint.d/10-nrs-docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.d/10-nrs-docker-entrypoint.sh
 COPY --from=build /nginx-remote-signal /usr/local/bin/nginx-remote-signal
-
-CMD ["/bin/sh", "-c", "nginx-remote-signal -p 5000", "&", "nginx", "-g", "daemon off;"]
-
