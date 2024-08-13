@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: merofuruya/nginx-remote-reload:latest
+    image: merofuruya/nginx-remote-signal:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./nginx.conf.d:/etc/nginx/conf.d
