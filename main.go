@@ -9,6 +9,8 @@ import (
 	"github.com/alexflint/go-arg"
 )
 
+var Version string
+
 type nginxSignal string
 
 const (
@@ -23,6 +25,9 @@ type Args struct {
 
 func (Args) Description() string {
 	return "A simple HTTP server that sends signals to an nginx process.\nCall /signal/<start|stop|reload> to send a signal to nginx."
+}
+func (Args) Version() string {
+	return "nginx-remote-reload " + Version
 }
 
 func nginxSendSignal(signal nginxSignal) error {
