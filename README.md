@@ -1,33 +1,11 @@
-# nginx-remote-reload
-Reload nginx via network request from other service
+# nginx-remote-signal
+Send nginx signals via http request
 
-# usage
+# Usage
 
+Default port is 5000.
+GET `/signal/<reload|start|stop>` to send the appropriate signal to nginx.
 
-```yml
-services:
-  nginx:
-    image: merofuruya/nginx-remote-reload:latest
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx.conf.d:/etc/nginx/conf.d
-      - ./certbot/etc:/etc/letsencrypt
-      - ./certbot/var:/var/lib/letsencrypt
-    ports:
-      - 80:80
-    networks:
-      - nginx
-  
-  certbot:
-    build:
-      context: .
-      dockerfile_inline: |
-        FROM certbot/certbot
-        RUN apk --no-cache add wget
-    volumes:
-      - ./certbot/etc:/etc/letsencrypt
-      - ./certbot/var:/var/lib/letsencrypt
-    networks:
-      - nginx
-    command: certonly --webroot --webroot-path=/var/www/html --email --post-hook "wget -O - http://nginx:5000/signal/reload" -d example.com
-```
+Set environement variable `NRS_PORT` to change the port.
+
+See [example docker-cmpose file](./docs/docker-compose.example.yml) with certbot and nginx.
