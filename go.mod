@@ -1,4 +1,4 @@
-module github.com/MeroFuruya/nginx-remote-reload
+module github.com/MeroFuruya/nginx-remote-signal
 
 go 1.22.4
 

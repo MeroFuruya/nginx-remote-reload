@@ -3,9 +3,8 @@ Send nginx signals via http request
 
 # Usage
 
-Default port is 5000.
-GET `/signal/<reload|start|stop>` to send the appropriate signal to nginx.
+`GET /signal/<reload|start|stop>` to send the appropriate signal to nginx.
 
-Set environement variable `NRS_PORT` to change the port.
+Default port is 5000. May be changed by setting the `NRS_PORT` environment variable or `--port` argument.
 
 See [example docker-cmpose file](./docs/docker-compose.example.yml) with certbot and nginx.
